@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>中国地理标志商品网 — GI Procurement</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root{--bg:#f9fafb;--c:#fff;--b:#e5e7eb;--p:#1d4ed8;--pl:#eff6ff;--a:#047857;--al:#ecfdf5;--t:#111827;--t2:#6b7280;--t3:#9ca3af;--sh:0 1px 2px rgba(0,0,0,.04);--shl:0 4px 16px rgba(0,0,0,.06);--r:10px;--rs:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--t);line-height:1.55;-webkit-font-smoothing:antialiased}
+/* Header */
+.hd{background:var(--c);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,.92)}
+.hi{max-width:1340px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:18px}
+.logo{font-size:18px;font-weight:800;color:var(--p);white-space:nowrap;letter-spacing:-.3px}
+.logo s{color:var(--a);font-size:11px;font-weight:600;margin-left:5px;text-decoration:none;letter-spacing:.5px;text-transform:uppercase;opacity:.8}
+.nav{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px}
+.nb{padding:8px 18px;border:none;background:none;border-radius:8px;cursor:pointer;font-size:13px;color:var(--t2);transition:all .2s;font-weight:500;white-space:nowrap;letter-spacing:.2px}
+.nb.ac{background:var(--p);color:#fff;box-shadow:0 1px 3px rgba(29,78,216,.3)}
+.nb:hover:not(.ac){background:var(--pl);color:var(--p)}
+.sb{flex:1;max-width:400px;position:relative;margin-left:auto}
+.sb input{width:100%;padding:9px 14px 9px 36px;border:1.5px solid var(--b);border-radius:24px;font-size:13px;outline:none;transition:all .2s;background:var(--bg);font-family:inherit}
+.sb input:focus{border-color:var(--p);background:var(--c);box-shadow:0 0 0 3px rgba(29,78,216,.08)}
+.sb svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--t3)}
+.sd{position:absolute;top:100%;left:0;right:0;margin-top:6px;background:var(--c);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.1);max-height:360px;overflow-y:auto;display:none;z-index:200;border:1px solid var(--b)}
+.sd.show{display:block}
+.si{padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--b);display:flex;justify-content:space-between;align-items:center;transition:background .1s}
+.si:hover{background:var(--pl)}
+.si .sn{font-weight:600;font-size:13px;color:var(--t)}
+.si .sm{font-size:11px;color:var(--t2);margin-top:1px}
+.si .st{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--al);color:var(--a);font-weight:600}
+/* Main */
+.main{max-width:1340px;margin:0 auto;padding:20px 24px;display:flex;gap:20px;min-height:calc(100vh - 106px)}
+.ct{flex:1;min-width:0}
+.side{width:380px;flex-shrink:0;background:var(--c);border-radius:12px;box-shadow:var(--sh);overflow:hidden;display:flex;flex-direction:column;max-height:calc(100vh - 150px);position:sticky;top:80px;border:1px solid var(--b)}
+.side.hid{display:none}
+.shd{padding:15px 20px;border-bottom:1px solid var(--b);display:flex;justify-content:space-between;align-items:center}
+.shd h3{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.sc{width:28px;height:28px;border:none;background:var(--bg);border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .15s}
+.sc:hover{background:#fee2e2;color:#dc2626}
+.sbd{flex:1;overflow-y:auto;padding:6px 0}
+.sst{padding:10px 20px;display:flex;gap:16px;font-size:12px;color:var(--t2);border-bottom:1px solid var(--b)}
+.sst strong{color:var(--p);font-weight:700}
+.pi{padding:11px 20px;cursor:pointer;border-bottom:1px solid var(--b);transition:background .12s}
+.pi:hover{background:var(--pl)}
+.pi .pn{font-weight:600;font-size:13px;margin-bottom:2px}
+.pi .pm{font-size:11px;color:var(--t2);display:flex;gap:6px;align-items:center}
+.pi .pt{font-size:10px;padding:1px 7px;border-radius:8px;background:var(--al);color:var(--a);font-weight:600}
+/* Map */
+.mapc{width:100%;height:calc(100vh - 200px);background:var(--c);border-radius:12px;box-shadow:var(--sh);overflow:hidden;border:1px solid var(--b)}
+.mapc.full{height:calc(100vh - 150px)}
+.mph{display:flex;align-items:center;just-content:center;height:100%;color:var(--t3)}
+/* Cards */
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.rc{background:var(--c);border-radius:10px;box-shadow:var(--sh);padding:16px;cursor:pointer;transition:all .2s;border:1px solid var(--b)}
+.rc:hover{border-color:var(--p);box-shadow:var(--shl);transform:translateY(-2px)}
+.rc .rn{font-weight:700;font-size:14px;letter-spacing:-.1px}
+.rc .rct{font-size:12px;color:var(--a);font-weight:600;margin-top:4px}
+.rc .rci{font-size:11px;color:var(--t3);margin-top:2px}
+.rc .cat-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;margin-top:6px;background:var(--al);color:var(--a)}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px}
+.cc{background:var(--c);border-radius:8px;padding:12px 16px;cursor:pointer;border:1px solid var(--b);transition:all .15s}
+.cc:hover{border-color:var(--p);background:var(--pl)}
+.cc .cn{font-weight:600;font-size:13px}
+.cc .cm{font-size:11px;color:var(--t2);margin-top:2px}
+/* Category Tree - Premium */
+/* Category — E-commerce style */
+.cwrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.cgcard{background:var(--c);border-radius:14px;box-shadow:var(--sh);overflow:hidden;border:1px solid var(--b);transition:all .2s}
+.cgcard:hover{box-shadow:var(--shl)}
+.cgcard .cghd{padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--b);transition:background .15s}
+.cgcard .cghd:hover{background:var(--pl)}
+.cgcard .cghd .cgh-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.cgcard .cghd .cgh-info{flex:1;min-width:0}
+.cgcard .cghd .cgh-name{font-size:16px;font-weight:800;letter-spacing:-.2px;color:var(--t)}
+.cgcard .cghd .cgh-count{font-size:12px;color:var(--t2);margin-top:2px}
+.cgcard .cghd .cgh-arr{color:var(--t3);font-size:18px;transition:transform .2s}
+.cgcard .cghd:hover .cgh-arr{transform:translateX(3px);color:var(--p)}
+.cgcard .cgbd{padding:14px 20px 18px}
+.cgcard .sub-group{margin-bottom:12px}
+.cgcard .sub-group:last-child{margin-bottom:0}
+.cgcard .sub-title{font-size:13px;font-weight:700;color:var(--t);margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.cgcard .sub-title:hover{color:var(--p)}
+.cgcard .sub-title .cnt{font-size:11px;color:var(--t3);font-weight:400}
+.cgcard .tag-row{display:flex;flex-wrap:wrap;gap:5px}
+.c3t{display:inline-flex;align-items:center;gap:3px;padding:4px 11px;font-size:11px;border-radius:14px;border:1px solid var(--b);cursor:pointer;background:var(--bg);transition:all .15s;color:var(--t2);font-weight:500}
+.c3t:hover{background:var(--pl);border-color:var(--p);color:var(--p)}
+.c3t .tcnt{font-size:10px;color:var(--t3);font-weight:400}
+.c3t:hover .tcnt{color:var(--p)}
+/* Category icon colors */
+.ic-tea{background:#dcfce7;color:#16a34a}
+.ic-fruit{background:#fef3c7;color:#d97706}
+.ic-grain{background:#fee2e2;color:#dc2626}
+.ic-live{background:#fce7f3;color:#db2777}
+.ic-fish{background:#e0e7ff;color:#4f46e5}
+.ic-herb{background:#d1fae5;color:#059669}
+.ic-spice{background:#fff7ed;color:#ea580c}
+.ic-wine{background:#fef2f2;color:#b91c1c}
+.ic-craft{background:#ede9fe;color:#7c3aed}
+.ic-other{background:#f3f4f6;color:#6b7280}
+/* Stats */
+.sbar{display:flex;gap:28px;margin-bottom:16px;padding:18px 24px;background:var(--c);border-radius:12px;box-shadow:var(--sh);flex-wrap:wrap;border:1px solid var(--b)}
+.sbar .stt{text-align:center;flex:1;min-width:80px}
+.sbar .sv{font-size:28px;font-weight:800;color:var(--p);letter-spacing:-.5px}
+.sbar .sl{font-size:11px;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+/* Breadcrumb */
+.brd{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--t2);margin-bottom:14px;flex-wrap:wrap;padding:0 2px}
+.brd s{cursor:pointer;color:var(--t2);text-decoration:none;transition:color .15s}
+.brd s:hover{color:var(--p)}
+.brd .sep{color:var(--t3);cursor:default}
+.brd .cur{color:var(--t);font-weight:700}
+/* Sort */
+.sortbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.sortbar select{padding:7px 12px;border:1px solid var(--b);border-radius:8px;font-size:12px;background:var(--c);color:var(--t);font-family:inherit;cursor:pointer;outline:none}
+.sortbar select:focus{border-color:var(--p)}
+.sortbar .result{font-size:12px;color:var(--t2);font-weight:500}
+.filt{display:flex;gap:6px;flex-wrap:wrap}
+.ftag{padding:5px 12px;font-size:11px;border-radius:14px;border:1px solid var(--b);cursor:pointer;background:var(--c);transition:all .15s;color:var(--t2);font-weight:500}
+.ftag:hover{border-color:var(--p);background:var(--pl);color:var(--p)}
+/* Modal */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.mdl{background:var(--c);border-radius:16px;max-width:880px;width:100%;max-height:86vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.mdh{padding:22px 28px 14px;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--b)}
+.mdh h2{font-size:21px;font-weight:800;letter-spacing:-.3px}
+.mdh .mm{font-size:12px;color:var(--t2);display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px}
+.mc2{width:30px;height:30px;border:none;background:var(--bg);border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .15s}
+.mc2:hover{background:#fee2e2;color:#dc2626}
+.mdb{padding:20px 28px 28px}
+.is{margin-bottom:20px}
+.is h4{font-size:12px;color:var(--t3);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}
+.ig .l{font-size:12px;color:var(--t3)}
+.ig .v{font-size:14px;font-weight:600}
+.ig .fv{grid-column:1/-1;font-size:13px;color:var(--t2);line-height:1.7}
+.ec{background:var(--bg);border-radius:10px;padding:15px;margin-bottom:8px;border:1px solid var(--b)}
+.ec .eh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.ec .en{font-weight:700;font-size:14px}
+.ec .et2{font-size:11px;color:var(--t2);margin-left:8px}
+.ec .em{font-size:11px;color:var(--t3);display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.tag{display:inline-block;padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:.3px}
+.tg{background:var(--pl);color:var(--p)}
+.tgg{background:var(--al);color:var(--a)}
+.tgy{background:#fef3c7;color:#92400e}
+.bb{padding:8px 16px;border:1px solid var(--b);background:var(--c);border-radius:8px;cursor:pointer;font-size:12px;color:var(--t2);display:inline-flex;align-items:center;gap:4px;margin-bottom:14px;font-weight:500;transition:all .15s}
+.bb:hover{background:var(--bg);color:var(--p)}
+.btt{position:fixed;bottom:32px;right:32px;width:44px;height:44px;background:var(--p);color:#fff;border:none;border-radius:14px;cursor:pointer;font-size:18px;box-shadow:0 4px 12px rgba(29,78,216,.3);display:none;z-index:200;transition:all .2s;font-weight:700}
+.btt:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(29,78,216,.4)}
+.btt.show{display:flex;align-items:center;justify-content:center}
+/* Welcome */
+.wel{text-align:center;padding:60px 20px}
+.wel h2{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.wel p{color:var(--t2);max-width:600px;margin:12px auto 0;line-height:1.7;font-size:15px}
+.wft{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;max-width:780px;margin-left:auto;margin-right:auto}
+.wf{background:var(--c);border-radius:14px;padding:28px 20px;box-shadow:var(--sh);text-align:center;border:1px solid var(--b);transition:transform .2s}
+.wf:hover{transform:translateY(-3px)}
+.wf .fi{font-size:32px;margin-bottom:10px}
+.wf .ft{font-weight:700;font-size:14px}
+.wf .fd{font-size:12px;color:var(--t3);margin-top:4px}
+.ftr{text-align:center;padding:18px;color:var(--t3);font-size:11px;border-top:1px solid var(--b);letter-spacing:.3px}
+.empty{text-align:center;padding:40px;color:var(--t3);font-size:14px}
+/* Spinner */
+.sp{width:28px;height:28px;border:2.5px solid var(--b);border-top-color:var(--p);border-radius:50%;animation:s .7s linear infinite;margin:0 auto 12px}
+@keyframes s{to{transform:rotate(360deg)}}
+/* Filter chips row */
+.fchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.fchips .fc{font-size:11px;padding:4px 10px;border-radius:8px;background:var(--bg);border:1px solid var(--b);cursor:pointer;color:var(--t2);font-weight:500}
+.fchips .fc.on{background:var(--pl);color:var(--p);border-color:var(--p)}
+@media(max-width:768px){.main{flex-direction:column;padding:12px}.side{width:100%;max-height:none;position:static}.mapc{height:380px}.hi{flex-wrap:wrap}.sb{order:3;max-width:100%;flex:100%}.wft{grid-template-columns:1fr}.rg{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}.sbar{gap:16px;padding:14px}.sbar .sv{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="hd"><div class="hi">
+<div class="logo">中国地标商品网<s>GI</s></div>
+<div class="nav">
+<button class="nb ac" data-view="map">地图</button>
+<button class="nb" data-view="region">省市</button>
+<button class="nb" data-view="category">品类</button>
+</div>
+<div class="sb">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input type="text" id="si" placeholder="搜索产品、地区、品类…" autocomplete="off">
+<div class="sd" id="sdd"></div>
+</div>
+</div></div>
+<div class="main" id="mc"><div class="ct" id="ca"></div><div class="side hid" id="sbar"></div></div>
+<div id="mr"></div><button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="ftr">数据来源：国家知识产权局地理标志产品保护公告 · 2,684个产品 · 16,837家认证企业 · 10大类93小类</div>
+
+<script src="data.js"></script>
+<script src="enterprises.js"></script>
+<script>
+const A={
+  cv:'map',cp:null,cc:null,m:null,gl:!1,gd:null,
+  ci:{'茶':'🍵','果蔬':'🍎','粮食':'🌾','畜禽':'🐓','水产':'🐟','中药材':'🌿','调味品':'🧂','酒类':'🍶','工艺品':'🏺','其他':'📦'},
+  skipProv:['台湾省','香港特别行政区','澳门特别行政区'],
+  esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');},
+  init(){this.bn();this.bs();this.lg();this.sw();window.addEventListener('scroll',()=>{document.getElementById('btt').classList.toggle('show',window.scrollY>400);});},
+  bn(){document.querySelectorAll('.nb').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.nb').forEach(x=>x.classList.remove('ac'));b.classList.add('ac');this.sv(b.dataset.view);});});},
+  bs(){const i=document.getElementById('si'),d=document.getElementById('sdd');let t;i.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>{const q=i.value.trim();if(!q.length){d.classList.remove('show');return;}const r=this.search(q);this.rsd(d,r);},120);});i.addEventListener('keydown',e=>{if(e.key==='Escape')d.classList.remove('show');});document.addEventListener('click',e=>{if(!e.target.closest('.sb'))d.classList.remove('show');});},
+  search(q){q=q.toLowerCase();const r=[],s=new Set();for(const p of P){if(r.length>=50)break;if(s.has(p.n))continue;if(p.n.toLowerCase().includes(q)||(p.p||'').includes(q)||(p.c||'').includes(q)||(p.cat1||'').includes(q)||(p.cat2||'').includes(q)||(p.ds||'').includes(q)){r.push(p);s.add(p.n);}}return r;},
+  rsd(d,rs){if(!rs.length){d.innerHTML='<div class="si" style="color:var(--t3)">未找到匹配</div>';}else{d.innerHTML=rs.map(p=>`<div class="si" dn="${this.esc(p.n)}"><div><span class="sn">${this.esc(p.n)}</span><br><span class="sm">${this.esc(p.p||'')} · ${this.esc(p.c||'')} · ${this.esc(p.cat3||'')}</span></div><span class="st">${this.esc(p.cat3||p.cat1||'')}</span></div>`).join('');d.querySelectorAll('.si').forEach(it=>{it.addEventListener('click',()=>{const n=it.getAttribute('dn');const pr=P.find(x=>x.n===n);if(pr)this.spd(pr);d.classList.remove('show');document.getElementById('si').value='';});});}d.classList.add('show');},
+  sv(v){this.cv=v;this.cp=null;this.cc=null;this.hs();this.hm();const c=document.getElementById('ca');if(v==='map')this.rm(c);else if(v==='region')this.rr(c);else this.rk(c);},
+  sw(){document.getElementById('ca').innerHTML=`<div class="wel"><h2>中国地理标志产品采购查询平台</h2><p>覆盖 <strong>2,684</strong> 个地理标志保护产品、<strong>16,837</strong> 家认证企业，10 大品类 · 93 个三级细分 · 31 个省级行政区，助力精准采购决策。</p><div class="wft"><div class="wf"><div class="fi">🗺️</div><div class="ft">地图可视化</div><div class="fd">点击省份逐级下钻</div></div><div class="wf"><div class="fi">📋</div><div class="ft">省市导航</div><div class="fd">31省逐市浏览</div></div><div class="wf"><div class="fi">📦</div><div class="ft">三级品类筛选</div><div class="fd">10大类 · 93小类</div></div></div>`;},
+  // ─── Map (FIXED: use full province names from products) ───
+  rm(c){c.innerHTML='<div class="mapc" id="cm"></div>';if(this.gl)this.im();else document.getElementById('cm').innerHTML='<div class="mph"><div class="sp"></div>加载地图数据…</div>';},
+  lg(){if(this.gd){this.gl=!0;echarts.registerMap('china',this.gd);if(this.cv==='map')this.im();return;}
+  fetch('china.json').then(r=>r.json()).then(d=>{this.gd=d;this.gl=!0;echarts.registerMap('china',d);if(this.cv==='map')this.im();}).catch(()=>{fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json').then(r=>r.json()).then(d=>{this.gd=d;this.gl=!0;echarts.registerMap('china',d);if(this.cv==='map')this.im();}).catch(()=>{const el=document.getElementById('cm');if(el)el.innerHTML='<div class="mph">地图数据加载失败</div>';});});},
+  im(){if(this.m)this.m.dispose();const d=document.getElementById('cm');if(!d)return;
+  if(typeof echarts==='undefined'){d.innerHTML='<div class="mph">ECharts 未加载，请刷新页面</div>';return;}
+  const pc={};for(const p of P){const fn=p.p||'';if(fn&&!this.skipProv.includes(fn))pc[fn]=(pc[fn]||0)+1;}
+  const mx=Math.max(...Object.values(pc),1);
+  const mapData=Object.entries(pc).map(([n,v])=>({name:n,value:v}));
+  this.m=echarts.init(d);
+  this.m.setOption({
+    tooltip:{trigger:'item',formatter:params=>{if(this.skipProv.includes(params.name))return`<b>${params.name}</b>`;const c=pc[params.name]||0;return`<b>${params.name}</b><br/>地标产品：<span style="color:#047857;font-weight:700;font-size:16px">${c}</span> 个<br/><span style="color:#9ca3af;font-size:11px">点击查看详情</span>`;}},
+    visualMap:{min:0,max:mx,left:20,bottom:20,text:['多','少'],inRange:{color:['#f0fdf4','#bbf7d0','#86efac','#4ade80','#22c55e','#16a34a','#15803d']},calculable:!0,textStyle:{color:'#6b7280'}},
+    series:[{type:'map',map:'china',roam:!0,scaleLimit:{min:1,max:5},zoom:1.2,label:{show:!0,fontSize:9,color:'#374151'},emphasis:{label:{show:!0,fontSize:13,fontWeight:'bold'},itemStyle:{areaColor:'#bfdbfe',borderColor:'#1d4ed8',borderWidth:2}},itemStyle:{borderColor:'#e5e7eb',borderWidth:.5,areaColor:'#f3f4f6'},data:mapData}]
+  });
+  // Bind click handler
+  const self=this;
+  this.m.off('click');
+  this.m.on('click',function(params){
+    if(!params.name||self.skipProv.includes(params.name))return;
+    const prs=P.filter(p=>p.p===params.name);
+    self.cp=params.name;
+    self.spb(params.name,prs);
+  });
+  window.addEventListener('resize',()=>this.m?.resize());},
+  // ─── Sidebar ───
+  spb(pr,prs){const s=document.getElementById('sbar');const cs={};prs.forEach(p=>{cs[p.c||'未知']=(cs[p.c||'未知']||0)+1;});const ce=Object.entries(cs).sort((a,b)=>b[1]-a[1]);
+  s.classList.remove('hid');s.innerHTML=`<div class="shd"><h3>📍 ${this.esc(pr)}</h3><button class="sc" onclick="A.hs()">✕</button></div><div class="sst"><span>共 <strong>${prs.length}</strong> 个产品</span><span>覆盖 <strong>${ce.length}</strong> 个城市</span></div><div class="sbd">${ce.map(([ct,cn])=>`<div class="pi" onclick="A.scp('${this.esc(pr)}','${this.esc(ct)}')"><div class="pn">🏙️ ${this.esc(ct)}</div><div class="pm">${cn} 个地标产品</div></div>`).join('')}</div>`;},
+  scp(pr,ct){this.cc=ct;const prs=P.filter(x=>x.p===pr&&(x.c||'未知')===ct);
+  document.getElementById('sbar').innerHTML=`<div class="shd"><h3>🏙️ ${this.esc(ct)}</h3><button class="sc" onclick="A.hs()">✕</button></div><div class="sbd"><button class="bb" style="margin:8px 16px" onclick="A.spb('${this.esc(pr)}',P.filter(x=>x.p==='${this.esc(pr)}'))">← 返回 ${this.esc(pr)}</button>${prs.map(p=>`<div class="pi" onclick="A.spd(P.find(x=>x.n==='${this.esc(p.n)}'))"><div class="pn">${this.esc(p.n)}</div><div class="pm"><span class="pt">${this.esc(p.cat3||p.cat1||'')}</span>${p.ec?`<span>· ${p.ec}家企业</span>`:''}</div></div>`).join('')}</div>`;},
+  hs(){document.getElementById('sbar').classList.add('hid');this.cp=null;this.cc=null;},
+  // ─── Region ───
+  rr(c){const pm={};for(const p of P){const pr=p.p||'未知';if(!pm[pr])pm[pr]={t:0,cs:{}};pm[pr].t++;pm[pr].cs[p.c||'未知']=(pm[pr].cs[p.c||'未知']||0)+1;}
+  const pv=Object.entries(pm).sort((a,b)=>b[1].t-a[1].t);
+  c.innerHTML=`<div class="sbar">${[{l:'省级行政区',v:pv.length},{l:'地标产品',v:P.length.toLocaleString()},{l:'认证企业',v:Object.values(E).reduce((s,x)=>s+x.length,0).toLocaleString()},{l:'产品品类',v:10}].map(x=>`<div class="stt"><div class="sv">${x.v}</div><div class="sl">${x.l}</div></div>`).join('')}</div><div class="sortbar"><span class="result">${pv.length} 个省级行政区</span></div><div class="rg">${pv.map(([pr,i])=>`<div class="rc" onclick="A.rd('${this.esc(pr)}')"><div class="rn">${this.esc(pr)}</div><div class="rct">${i.t} 个产品</div><div class="rci">覆盖 ${Object.keys(i.cs).length} 个城市</div></div>`).join('')}</div>`;},
+  rd(pr){this.cp=pr;const pm={};for(const p of P){if((p.p||'未知')!==pr)continue;if(!pm[p.p])pm[p.p]={t:0,cs:{}};pm[p.p].t++;pm[p.p].cs[p.c||'未知']=(pm[p.p].cs[p.c||'未知']||0)+1;}
+  const i=pm[pr];const cs=Object.entries(i.cs).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('ca').innerHTML=`<div class="brd"><s onclick="A.sv('region')">全国</s><span class="sep">›</span><span class="cur">${this.esc(pr)}</span></div><div class="sbar">${[{l:'产品',v:i.t},{l:'城市',v:cs.length}].map(x=>`<div class="stt"><div class="sv">${x.v}</div><div class="sl">${x.l}</div></div>`).join('')}</div><h3 style="margin-bottom:12px;font-size:15px;font-weight:700">📍 ${this.esc(pr)}</h3><div class="cg">${cs.map(([ct,cn])=>`<div class="cc" onclick="A.scr('${this.esc(pr)}','${this.esc(ct)}')"><div class="cn">${this.esc(ct)}</div><div class="cm">${cn} 个产品</div></div>`).join('')}</div>`;},
+  scr(pr,ct){const prs=P.filter(x=>(x.p||'未知')===pr&&(x.c||'未知')===ct);
+  document.getElementById('ca').innerHTML=`<div class="brd"><s onclick="A.sv('region')">全国</s><span class="sep">›</span><s onclick="A.rd('${this.esc(pr)}')">${this.esc(pr)}</s><span class="sep">›</span><span class="cur">${this.esc(ct)}</span></div><div class="sortbar"><span class="result">${prs.length} 个产品</span><select onchange="A.sortL(this.value,'${this.esc(pr)}','${this.esc(ct)}')"><option value="d">默认</option><option value="n">按名称 A-Z</option><option value="e">按企业数 ↓</option></select></div><div class="rg" id="grd">${this.rpc(prs)}</div>`;},
+  rpc(prs){return prs.map(p=>`<div class="rc" onclick="A.spd(P.find(x=>x.n==='${this.esc(p.n)}'))"><div class="rn">${this.esc(p.n)}</div><div class="rct">${this.ci[p.cat1]||''} ${this.esc(p.cat3||p.cat1||'')}</div>${p.ec?`<div class="rci">${p.ec} 家认证企业</div>`:''}</div>`).join('')||'<div class="empty">暂无产品</div>';},
+  sortL(by,pr,ct){const prs=P.filter(x=>(x.p||'未知')===pr&&(x.c||'未知')===ct);if(by==='n')prs.sort((a,b)=>a.n.localeCompare(b.n,'zh'));if(by==='e')prs.sort((a,b)=>(b.ec||0)-(a.ec||0));document.getElementById('grd').innerHTML=this.rpc(prs);},
+  // ─── Category (E-commerce card style) ───
+  rk(c){
+    const t={};for(const p of P){const c1=p.cat1||'其他';const c2=p.cat2||'其他';const c3=p.cat3||'其他';if(!t[c1])t[c1]={};if(!t[c1][c2])t[c1][c2]={};t[c1][c2][c3]=(t[c1][c2][c3]||0)+1;}
+    const icolors={'茶':'ic-tea','果蔬':'ic-fruit','粮食':'ic-grain','畜禽':'ic-live','水产':'ic-fish','中药材':'ic-herb','调味品':'ic-spice','酒类':'ic-wine','工艺品':'ic-craft','其他':'ic-other'};
+    let h=`<div class="sbar">${[{l:'一级类目',v:10},{l:'二级类目',v:Object.values(t).reduce((s,x)=>s+Object.keys(x).length,0)},{l:'三级细分',v:93},{l:'产品总数',v:P.length.toLocaleString()}].map(x=>`<div class="stt"><div class="sv">${x.v}</div><div class="sl">${x.l}</div></div>`).join('')}</div><div class="cwrap">`;
+    for(const [c1,c2s] of Object.entries(t).sort((a,b)=>Object.values(b[1]).reduce((s,x)=>s+Object.values(x).reduce((ss,y)=>ss+y,0),0)-Object.values(a[1]).reduce((s,x)=>s+Object.values(x).reduce((ss,y)=>ss+y,0),0))){
+      const t1=Object.values(c2s).reduce((s,x)=>s+Object.values(x).reduce((ss,y)=>ss+y,0),0);
+      h+=`<div class="cgcard"><div class="cghd" onclick="A.ks('${this.esc(c1)}')"><div class="cgh-ico ${icolors[c1]||'ic-other'}">${this.ci[c1]||'📦'}</div><div class="cgh-info"><div class="cgh-name">${this.esc(c1)}</div><div class="cgh-count">${t1} 个产品 · ${Object.keys(c2s).length} 个子类</div></div><div class="cgh-arr">→</div></div><div class="cgbd">`;
+      for(const [c2,c3s] of Object.entries(c2s).sort((a,b)=>Object.values(b[1]).reduce((s,x)=>s+x,0)-Object.values(a[1]).reduce((s,x)=>s+x,0))){
+        const t2=Object.values(c3s).reduce((s,x)=>s+x,0);
+        h+=`<div class="sub-group"><div class="sub-title" onclick="A.ks2('${this.esc(c1)}','${this.esc(c2)}')">${this.esc(c2||'其他')} <span class="cnt">${t2}</span></div><div class="tag-row">`;
+        for(const [c3,cnt] of Object.entries(c3s).sort((a,b)=>b[1]-a[1]).slice(0,6)){
+          h+=`<span class="c3t" onclick="event.stopPropagation();A.ks3('${this.esc(c1)}','${this.esc(c2)}','${this.esc(c3)}')">${this.esc(c3)} <span class="tcnt">${cnt}</span></span>`;
+        }
+        if(Object.keys(c3s).length>6)h+=`<span class="c3t" onclick="A.ks2('${this.esc(c1)}','${this.esc(c2)}')">+${Object.keys(c3s).length-6} 更多</span>`;
+        h+=`</div></div>`;
+      }
+      h+=`</div></div>`;
+    }
+    h+=`</div>`;c.innerHTML=h;},
+  ks(c1){const prs=P.filter(x=>(x.cat1||'其他')===c1);
+  document.getElementById('ca').innerHTML=`<div class="brd"><s onclick="A.sv('category')">全部分类</s><span class="sep">›</span><span class="cur">${this.ci[c1]||''} ${this.esc(c1)}</span></div><div class="sortbar"><span class="result">${prs.length} 个产品</span><div class="filt">${this.cf(c1)}</div><select onchange="A.sortC(this.value,'${this.esc(c1)}')"><option value="d">默认</option><option value="n">按名称</option><option value="e">按企业数↓</option></select></div><div class="rg" id="grd">${this.rpc(prs)}</div>`;},
+  cf(c1){const c2s={};for(const p of P){if((p.cat1||'其他')===c1)c2s[p.cat2||'其他']=(c2s[p.cat2||'其他']||0)+1;}return Object.entries(c2s).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([c2,cn])=>`<span class="ftag" onclick="A.ks2('${this.esc(c1)}','${this.esc(c2)}')">${this.esc(c2)}·${cn}</span>`).join('');},
+  ks2(c1,c2){const prs=P.filter(x=>(x.cat1||'其他')===c1&&(x.cat2||'其他')===c2);
+  document.getElementById('ca').innerHTML=`<div class="brd"><s onclick="A.sv('category')">全部分类</s><span class="sep">›</span><s onclick="A.ks('${this.esc(c1)}')">${this.ci[c1]||''} ${this.esc(c1)}</s><span class="sep">›</span><span class="cur">${this.esc(c2)}</span></div><div class="sortbar"><span class="result">${prs.length} 个产品</span><select onchange="A.sortC2(this.value,'${this.esc(c1)}','${this.esc(c2)}')"><option value="d">默认</option><option value="n">按名称</option><option value="e">按企业数↓</option></select></div><div class="rg" id="grd">${this.rpc(prs)}</div>`;},
+  ks3(c1,c2,c3){const prs=P.filter(x=>(x.cat1||'其他')===c1&&(x.cat2||'其他')===c2&&(x.cat3||'其他')===c3);
+  document.getElementById('ca').innerHTML=`<div class="brd"><s onclick="A.sv('category')">全部分类</s><span class="sep">›</span><s onclick="A.ks('${this.esc(c1)}')">${this.ci[c1]||''} ${this.esc(c1)}</s><span class="sep">›</span><s onclick="A.ks2('${this.esc(c1)}','${this.esc(c2)}')">${this.esc(c2)}</s><span class="sep">›</span><span class="cur">${this.esc(c3)}</span></div><div class="sortbar"><span class="result">${prs.length} 个产品</span><select onchange="A.sortC3(this.value,'${this.esc(c1)}','${this.esc(c2)}','${this.esc(c3)}')"><option value="d">默认</option><option value="n">按名称</option><option value="e">按企业数↓</option></select></div><div class="rg" id="grd">${this.rpc(prs)}</div>`;},
+  sortC(by,c1){const prs=P.filter(x=>(x.cat1||'其他')===c1);if(by==='n')prs.sort((a,b)=>a.n.localeCompare(b.n,'zh'));if(by==='e')prs.sort((a,b)=>(b.ec||0)-(a.ec||0));document.getElementById('grd').innerHTML=this.rpc(prs);},
+  sortC2(by,c1,c2){const prs=P.filter(x=>(x.cat1||'其他')===c1&&(x.cat2||'其他')===c2);if(by==='n')prs.sort((a,b)=>a.n.localeCompare(b.n,'zh'));if(by==='e')prs.sort((a,b)=>(b.ec||0)-(a.ec||0));document.getElementById('grd').innerHTML=this.rpc(prs);},
+  sortC3(by,c1,c2,c3){const prs=P.filter(x=>(x.cat1||'其他')===c1&&(x.cat2||'其他')===c2&&(x.cat3||'其他')===c3);if(by==='n')prs.sort((a,b)=>a.n.localeCompare(b.n,'zh'));if(by==='e')prs.sort((a,b)=>(b.ec||0)-(a.ec||0));document.getElementById('grd').innerHTML=this.rpc(prs);},
+  // ─── Product Detail ───
+  spd(p){if(!p)return;const es=E[p.n]||[];const m=document.getElementById('mr');
+  m.innerHTML=`<div class="mo" onclick="if(event.target===this)A.hm()"><div class="mdl">
+<div class="mdh"><div><h2>${this.esc(p.n)}</h2><div class="mm">
+<span class="tag tg">${this.esc(p.gi||'地理标志产品')}</span>
+<span class="tag tgg">${this.ci[p.cat1]||''} ${this.esc(p.cat1||'')}</span>
+<span class="tag tgg">${this.esc(p.cat2||'')}</span>
+<span class="tag tgg">${this.esc(p.cat3||'')}</span>
+${p.st?`<span class="tag tgy">${this.esc(p.st)}</span>`:''}
+${p.an?`<span class="tag tg">公告 ${this.esc(p.an)} 号</span>`:''}
+</div></div><button class="mc2" onclick="A.hm()">✕</button></div>
+<div class="mdb">
+<div class="is"><h4>基本信息</h4><div class="ig">
+<div><span class="l">商品名称</span><br><span class="v">${this.esc(p.n)}</span></div>
+<div><span class="l">一级类目</span><br><span class="v">${this.ci[p.cat1]||''} ${this.esc(p.cat1||'')}</span></div>
+<div><span class="l">二级类目</span><br><span class="v">${this.esc(p.cat2||'')}</span></div>
+<div><span class="l">三级细分</span><br><span class="v">${this.esc(p.cat3||'')}</span></div>
+<div><span class="l">省份 / 城市</span><br><span class="v">${this.esc(p.p||'')} · ${this.esc(p.c||'')}${p.d?' · '+this.esc(p.d):''}</span></div>
+<div><span class="l">GI 认证类型</span><br><span class="v">${this.esc(p.gi||'地理标志产品')}</span></div>
+${p.st?`<div><span class="l">产品状态</span><br><span class="v">${this.esc(p.st)}</span></div>`:''}
+${p.an?`<div><span class="l">官方公告号</span><br><span class="v">第 ${this.esc(p.an)} 号</span></div>`:''}
+<div><span class="l">认证企业</span><br><span class="v">${es.length} 家</span></div>
+</div></div>
+${p.ds?`<div class="is"><h4>产品简介</h4><div class="ig"><div class="fv">${this.esc(p.ds)}</div></div></div>`:''}
+${p.ft?`<div class="is"><h4>产品特点</h4><div class="ig"><div class="fv">${this.esc(p.ft)}</div></div></div>`:''}
+${p.ev?`<div class="is"><h4>地理环境</h4><div class="ig"><div class="fv">${this.esc(p.ev)}</div></div></div>`:''}
+${p.pa?`<div class="is"><h4>保护范围</h4><div class="ig"><div class="fv">${this.esc(p.pa)}</div></div></div>`:''}
+${p.su?`<div class="is"><h4>官方公告</h4><a href="${this.esc(p.su)}" target="_blank" style="color:var(--p);font-size:12px;word-break:break-all" rel="noopener">${this.esc(p.su)}</a></div>`:''}
+<div class="is"><h4>认证企业（${es.length} 家）</h4>
+${es.length===0?`<p style="color:var(--t3);font-size:13px">暂无认证企业数据</p>`:''}
+${es.slice(0,50).map(e=>`<div class="ec"><div class="eh"><span class="en">${this.esc(e.n)}</span>${e.type?`<span class="et2">${this.esc(e.type)}</span>`:''}</div><div class="em">${e.code?`<span>🆔 ${this.esc(e.code)}</span>`:''}${e.ad?`<span>📅 ${this.esc(e.ad)}</span>`:''}${e.st?`<span>📌 ${this.esc(e.st)}</span>`:''}${e.an?`<span>📋 ${this.esc(e.an)}号</span>`:''}${e.url?`<span><a href="${this.esc(e.url)}" target="_blank" style="color:var(--p)" rel="noopener">公告原文</a></span>`:''}</div></div>`).join('')}
+${es.length>50?`<p style="text-align:center;color:var(--t3);font-size:12px;margin-top:10px">仅展示前 50 家，共 ${es.length} 家</p>`:''}
+</div></div></div></div>`;},
+  hm(){document.getElementById('mr').innerHTML='';},
+};
+A.init();
+</script>
+</body>
+</html>
